@@ -110,7 +110,7 @@ width: auto !important;
 											@if($student->GETCLASS)
 												{{ $student->GETCLASS->class }}
 											@else
-												Class is not available anymore
+												Class is not available anymor
 											@endif
 										</td>
 										<td>{{ $student->updated_at }}</td>
