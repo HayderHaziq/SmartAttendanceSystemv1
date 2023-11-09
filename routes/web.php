@@ -56,7 +56,6 @@ Route::get('teacherdashboard',[TeacherController::class,'index'])->name('teacher
 Route::get('teacherstudentlist',[TeacherController::class,'students'])->name('teacherstudentlist');
 Route::get('generatereports',[TeacherController::class,'generatereports'])->name('generatereports');
 Route::post('printAttendanceReport',[TeacherController::class,'printAttendanceReport'])->name('printAttendanceReport');
-Route::get('printWarningLetter',[TeacherController::class,'printWarningLetter'])->name('printWarningLetter');
 
 
 

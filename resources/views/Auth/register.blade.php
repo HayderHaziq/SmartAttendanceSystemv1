@@ -61,11 +61,6 @@
 						<h5 style="color:white; padding-left:30px;">SMART ATTENDANCE SYSTEM</h5>
 					</a>
 				</div>
-				<div class="login-menu" style="color:white;">
-					<ul>
-                    <li><a href="/admin-login" style="color:white;">Admin</a>&nbsp;&nbsp;&nbsp;&nbsp;</li>
-					</ul>
-				</div>
 			</div>
 		</div>
 		<div class="login-wrap d-flex align-items-center flex-wrap justify-content-center"

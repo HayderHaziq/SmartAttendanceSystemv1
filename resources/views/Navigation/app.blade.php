@@ -347,20 +347,9 @@
 							
                             
 						</li>
-						
-						<li>
-							<a href="/printWarningLetter" class="dropdown-toggle no-arrow">
-								<span class="micon  bi bi-file-earmark-pdf"></span
-								><span class="mtext">Print Warning Letter</span>
-							</a>
-                            
-						</li>
 
 						@endif
-				
 
-
-						
 					</ul>
 				</div>
 			</div>

@@ -52,14 +52,19 @@
 				class="container-fluid d-flex justify-content-between align-items-center"
 			>
 				<div class="brand-logo">
-					<a href="/" style="	color:black !important;
-	font-weight:bolder  !important; font-size:x-large;">
+					<a href="/" style="	color:black !important; font-weight:bolder  !important; font-size:x-large;">
 						<h5 style="color:white; padding-left:30px;">SMART ATTENDANCE SYSTEM</h5>
 					</a>
 				</div>
 				<div class="login-menu" style="color:white;">
 					<ul>
-                    <li><a href="/admin-login" style="color:white;">Admin</a>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: white">Role</a>
+							<ul class="dropdown-menu" style="border: 1px solid #333; border-radius: 5px; background-color: white; top: 30px;">
+								<li><a href="/admin-login" style="color: rgb(0, 0, 0); display: block; padding: 10px; text-decoration: none;">Admin</a></li>
+								<li><a href="/" style="color: rgb(0, 0, 0); display: block; padding: 10px; text-decoration: none;">Teacher</a></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
