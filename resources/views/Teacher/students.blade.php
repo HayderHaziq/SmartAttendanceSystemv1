@@ -1,5 +1,6 @@
 
 @include('Navigation.app')
+@include('Navigation\attendance-modal')
 <style>
 
 
@@ -114,24 +115,21 @@ width: auto !important;
 												<div
 													class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
 												>
-													<a class="dropdown-item view" 
-													href="#"
-													data-id="{{ $student->id }}"
-                                                    data-studentname="{{ $student->student_name }}"
-                                                    data-studentid="{{ $student->student_id }}"
-                                                    data-classes="{{ $student->class_id }}"
-														><i class="dw dw-eye"></i> View</a>
+												<a class="dropdown-item view" 
+												href="#"
+												data-id="{{ $student->id }}"
+                                                data-studentname="{{ $student->student_name }}"
+                                                data-studentid="{{ $student->student_id }}"
+                                                data-classes="{{ $student->class_id }}"
+												><i class="dw dw-eye"></i> View Student Info</a>
 
-                                                        <a class="dropdown-item" 
-													href="#"
-													data-id="{{ $student->id }}"
-                                                    data-studentname="{{ $student->student_name }}"
-                                                    data-studentid="{{ $student->student_id }}"
-                                                    data-classes="{{ $student->class_id }}"
-														><i class="dw dw-user"></i> Attendance</a>
-
-												
-                                       
+												<a class="dropdown-item attendance" 
+												href="#"
+												data-id="{{ $student->id }}"
+												data-studentname="{{ $student->student_name }}"
+												data-studentid="{{ $student->student_id }}"
+												data-classes="{{ $student->class_id }}"
+												><i class="dw dw-user"></i> View Attendance</a>
 												</div>
 											</div>
 										</td>
@@ -151,24 +149,21 @@ width: auto !important;
 
 		@include('Admin.Modal.studentmodal')
 		@include('Navigation.footer')
-		<script>
-	$(document).ready(function(){ 
-        var dropdownParentEl = $('#bd-example-modal-lg > .modal-dialog > .modal-content');
 
 
-$('#class_id').select2({
-            dropdownParent: dropdownParentEl,
+<script>
+$(document).ready(function(){ 
+    var dropdownParentEl = $('#bd-example-modal-lg > .modal-dialog > .modal-content');
+
+    $('#class_id').select2({
+        dropdownParent: dropdownParentEl,
         width: '350px',
+    });
 
-});
-
-$('#class_id').change(function() {
-
-var teacher = $(this).find('option:selected').attr("name");
-
-$('#teachers').val(teacher);
-
-});
+    $('#class_id').change(function() {
+        var teacher = $(this).find('option:selected').attr("name");
+        $('#teachers').val(teacher);
+    });
 
 
 
@@ -192,8 +187,40 @@ $('#teachers').val(teacher);
 
 });
 
+$(".attendance").click(function () {
+        var id = $(this).data('id');
+        var studentname = $(this).data('studentname');
+        var studentid = $(this).data('studentid');
+        var classes = $(this).data('classes');
 
+		var attendanceData = [
+    		{ id: 1, date: '2023-01-01', time: '08:00:00', attendance: 'Present' },
+    		{ id: 2, date: '2023-01-02', time: '09:30:00', attendance: 'Absent' },
+			];
+
+        $("#attendanceTableBody").empty();
+
+		attendanceData.forEach(function (attendance) {
+    	var row = '<tr>' +
+        '<td>' + attendance.id + '</td>' +
+        '<td>' + attendance.date + '</td>' +
+        '<td>' + attendance.time + '</td>' +
+        '<td>' + attendance.attendance + '</td>' +
+        '<td><button class="btn btn-primary btn-sm edit-attendance" data-id="' + attendance.id + '">Edit</button></td>' +
+        '</tr>';
+    	$("#attendanceTableBody").append(row);
+	});
+
+        $('#attendanceModal').modal('show');
+    });
+
+	$(".edit-attendance").click(function () {
+    var attendanceId = $(this).data('id');
+    // Add logic to handle the editing of attendance using the attendanceId
+    console.log('Edit Attendance Clicked for ID: ' + attendanceId);
+});
 
 
 });
-		</script>
+
+</script>
