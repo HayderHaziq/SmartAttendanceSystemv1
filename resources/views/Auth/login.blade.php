@@ -93,7 +93,7 @@
 						<div class="login-box bg-white box-shadow border-radius-10">
 							<div class="login-title">
 								<center>
-								<h2 class="text-center text-primary">Welcome Back !<br><br><h2 style="color:black;">Sign in to your Account</h2></h2>
+								<h2 class="text-center text-primary">Teacher<br><br><h2 style="color:black;">Sign in to your Account</h2></h2>
 								</center>
 							</div>
 							<form action="loginuser" method="POST" autocomplete="off" aria-autocomplete="off">
