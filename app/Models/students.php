@@ -15,5 +15,4 @@ class students extends Model
     {
         return $this->belongsTo('App\Models\classes', 'class_id');
     }
-
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\AttendanceController;
 
 
 
@@ -56,12 +57,5 @@ Route::get('teacherdashboard',[TeacherController::class,'index'])->name('teacher
 Route::get('teacherstudentlist',[TeacherController::class,'students'])->name('teacherstudentlist');
 Route::get('generatereports',[TeacherController::class,'generatereports'])->name('generatereports');
 Route::post('printAttendanceReport',[TeacherController::class,'printAttendanceReport'])->name('printAttendanceReport');
-
-
-
-
-
-
-
-
-
+Route::get('/attendance/{studentId}', [AttendanceController::class, 'getAttendance'])->name('attendance.get');
+Route::post('/update-attendance-status/{studentId}', [AttendanceController::class, 'updateStatus']);

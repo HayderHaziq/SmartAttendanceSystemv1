@@ -1,9 +1,8 @@
-
 @include('Navigation.app')
-@include('Navigation\attendance-modal')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 <style>
-
-
 .select2-selection__rendered {
     line-height: 50px !important;
   }
@@ -115,22 +114,23 @@ width: auto !important;
 												<div
 													class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
 												>
-												<a class="dropdown-item view" 
+												<a class="dropdown-item view_info" 
 												href="#"
 												data-id="{{ $student->id }}"
                                                 data-studentname="{{ $student->student_name }}"
                                                 data-studentid="{{ $student->student_id }}"
                                                 data-classes="{{ $student->class_id }}"
-												><i class="dw dw-eye"></i> View Student Info</a>
+												><i class="dw dw-eye"></i> View Info</a>
 
 												<a class="dropdown-item attendance" 
 												href="#"
-												data-id="{{ $student->id }}"
+												data-id="{{ $justIds[$key] }}"
 												data-studentname="{{ $student->student_name }}"
 												data-studentid="{{ $student->student_id }}"
 												data-classes="{{ $student->class_id }}"
 												><i class="dw dw-user"></i> View Attendance</a>
 												</div>
+
 											</div>
 										</td>
 									</tr>
@@ -147,80 +147,120 @@ width: auto !important;
 		</div>
 
 
-		@include('Admin.Modal.studentmodal')
+		@include('Navigation.info')
 		@include('Navigation.footer')
+        @include('Navigation.viewAttendanceModal')
 
 
 <script>
-$(document).ready(function(){ 
-    var dropdownParentEl = $('#bd-example-modal-lg > .modal-dialog > .modal-content');
-
-    $('#class_id').select2({
-        dropdownParent: dropdownParentEl,
-        width: '350px',
+$(document).ready(function () {
+    $('.select2').select2({
+        dropdownParent: $('body')
     });
 
-    $('#class_id').change(function() {
+    $('#class_id').on('change', function () {
         var teacher = $(this).find('option:selected').attr("name");
         $('#teachers').val(teacher);
     });
 
-
-
-	$(".view").click(function () {
-	var id = $(this).data('id');
-	var studentname = $(this).data('studentname');
-	var studentid = $(this).data('studentid');
-	var classes = $(this).data('classes');
-
-	$('#id').val(id);
-	$('#type').val('V');
-	$('#student_name').val(studentname).prop('readonly',true);
-	$('#student_id').val(studentid).prop('readonly',true);
-	$('#class_id').val(classes).prop('disabled',true).trigger('change');
-    
-	$('.submitbtn').hide();
-
-	$('.modal-title').html('View Student');
-
-	$('.bs-example-modal-lg').modal('show');
-
-});
-
-$(".attendance").click(function () {
+    $(".view_info").click(function () {
         var id = $(this).data('id');
         var studentname = $(this).data('studentname');
         var studentid = $(this).data('studentid');
         var classes = $(this).data('classes');
 
-		var attendanceData = [
-    		{ id: 1, date: '2023-01-01', time: '08:00:00', attendance: 'Present' },
-    		{ id: 2, date: '2023-01-02', time: '09:30:00', attendance: 'Absent' },
-			];
+        $('#id').val(id);
+        $('#type').val('V');
+        $('#student_name').val(studentname).prop('readonly', true);
+        $('#student_id').val(studentid).prop('readonly', true);
+        $('#class_id').val(classes).prop('disabled', true).trigger('change');
 
-        $("#attendanceTableBody").empty();
+        $('.submitbtn').hide();
 
-		attendanceData.forEach(function (attendance) {
-    	var row = '<tr>' +
-        '<td>' + attendance.id + '</td>' +
-        '<td>' + attendance.date + '</td>' +
-        '<td>' + attendance.time + '</td>' +
-        '<td>' + attendance.attendance + '</td>' +
-        '<td><button class="btn btn-primary btn-sm edit-attendance" data-id="' + attendance.id + '">Edit</button></td>' +
-        '</tr>';
-    	$("#attendanceTableBody").append(row);
-	});
+        $('.modal-title').html('View Student');
 
-        $('#attendanceModal').modal('show');
+        $('#viewInfoModal').modal('show');
     });
 
-	$(".edit-attendance").click(function () {
-    var attendanceId = $(this).data('id');
-    // Add logic to handle the editing of attendance using the attendanceId
-    console.log('Edit Attendance Clicked for ID: ' + attendanceId);
-});
+    $(".attendance").click(function () {
+        var studentId = $(this).data('id');
+        console.log('Clicked button for student ID:', studentId);
 
+        $.ajax({
+            url: '/attendance/' + studentId,
+            method: 'GET',
+            dataType: 'json',
+            success: function (attendanceData) {
+                console.log('Attendance Data:', attendanceData);
+                if (attendanceData && attendanceData.attendance) {
+                    var data = attendanceData.attendance;
+                    $('#attendance_time').text(data.time);
+                    $('#attendance_date').text(data.date);
+                    $('#attendance_status').text(data.status);
 
+                    // Show the modal
+                    $('#viewAttendanceModal').modal('show');
+
+                    // Event listener for the "Save" button within the modal
+                    $("#saveStatusBtn").off('click').on('click', function () {
+                        var newStatus = $('#changeStatusDropdown').val();
+
+                        // Show a confirmation dialog
+                        if (confirm('Are you sure you want to update the status to ' + newStatus + '?')) {
+                            // Call the function to save the attendance status
+                            saveAttendanceStatus(studentId, newStatus);
+                        }
+                    });
+
+                } else {
+                    $('#attendance_time').text('');
+                    $('#attendance_date').text('');
+                    $('#attendance_status').text('No attendance data available.');
+                    $('#viewAttendanceModal').modal('show');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching attendance data:', error);
+                $('#attendance_time').text('');
+                $('#attendance_date').text('');
+                $('#attendance_status').text('Error fetching attendance data.');
+                $('#viewAttendanceModal').modal('show');
+            }
+        });
+    });
+
+    function saveAttendanceStatus(studentId, newStatus) {
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');  // Get the CSRF token from the meta tag
+
+        $.ajax({
+            url: '/update-attendance-status/' + studentId,
+            method: 'POST',
+            data: {
+                status: newStatus,
+                _token: csrfToken  // Include the CSRF token in the data
+            },
+            success: function (response) {
+                console.log(response);  // Log the response for debugging
+
+                // Check if the response contains a 'message' key
+                if (response && response.message) {
+                    alert('Status updated successfully: ' + response.message);
+                } else {
+                    alert('Status update failed. Please try again.');
+                }
+
+                // You can also update the UI or perform additional actions based on the response
+            },
+            error: function (error) {
+                console.error(error);  // Log the error for debugging
+
+                // Display an error message to the user
+                alert('An error occurred while updating the status. Please try again.');
+
+                // You can handle errors based on the specific error response from the server
+            }
+        });
+    }
 });
 
 </script>
