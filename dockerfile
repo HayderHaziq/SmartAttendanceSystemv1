@@ -1,5 +1,5 @@
 # Use an official PHP image with Apache as a base image
-FROM gcr.io/google-appengine/php:8.0
+FROM php:8.0.30-apache
 
 # Install required dependencies
 RUN apt-get update && apt-get install -y \
