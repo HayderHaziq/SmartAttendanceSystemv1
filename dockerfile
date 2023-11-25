@@ -7,7 +7,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath soap
+    libpng-dev \
+    libjpeg-dev \
+    && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath soap gd
 
 # Enable Apache modules
 RUN a2enmod rewrite
