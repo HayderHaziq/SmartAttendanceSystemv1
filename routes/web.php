@@ -50,6 +50,7 @@ Route::any('deletestudent/{id}',[AdminController::class,'deletestudent'])->name(
 Route::get('classlist',[AdminController::class,'classes'])->name('classlist');
 Route::post('addclass',[AdminController::class,'addclass'])->name('addclass');
 Route::any('deleteclass/{id}',[AdminController::class,'deleteclass'])->name('deleteclass');
+Route::get('/reports', [AdminController::class, 'showReports'])->name('reportlist');
 
 
 //Teacher Controller
@@ -58,4 +59,4 @@ Route::get('teacherstudentlist',[TeacherController::class,'students'])->name('te
 Route::get('generatereports',[TeacherController::class,'generatereports'])->name('generatereports');
 Route::post('printAttendanceReport',[TeacherController::class,'printAttendanceReport'])->name('printAttendanceReport');
 Route::get('/attendance/{studentId}', [AttendanceController::class, 'getAttendance'])->name('attendance.get');
-Route::post('/update-attendance-status/{studentId}', [AttendanceController::class, 'updateStatus']);
+Route::post('/update-attendance-status/{id}', [AttendanceController::class, 'updateStatus']);

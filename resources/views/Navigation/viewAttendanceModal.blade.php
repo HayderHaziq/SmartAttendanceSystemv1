@@ -2,6 +2,7 @@
 
 <!-- File path = resources\views\Navigation\viewAttendanceModal.blade.php -->
 
+<!-- View Attendance Modal -->
 <div class="modal fade" id="viewAttendanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -23,28 +24,15 @@
                                 <th>Change Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td id="attendance_time"></td>
-                                <td id="attendance_date"></td>
-                                <!-- Display the current status -->
-                                <td id="attendance_status"></td>
-                                <!-- Add a new cell for the dropdown -->
-                                <td>
-                                    <!-- Dropdown for changing status -->
-                                    <select id="changeStatusDropdown">
-                                        <option value="Present">Present</option>
-                                        <option value="Absent">Absent</option>
-                                    </select>
-                                </td>
-                            </tr>
+                        <tbody id="attendanceRecordsBody">
+                            <!-- Attendance records will be dynamically added here -->
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- Add a new button to save the changed status -->
+                <!-- Keep the "Save" button -->
                 <button type="button" class="btn btn-primary" id="saveStatusBtn">Save</button>
             </div>
         </div>

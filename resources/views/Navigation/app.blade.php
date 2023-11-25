@@ -315,13 +315,15 @@
 							</a>
                             
 						</li>
-                        <li>
-							<a href="#" class="dropdown-toggle no-arrow">
-								<span class="micon  bi-file-earmark-pdf"></span
-								><span class="mtext">Reports</span>
+						<li>
+							<a href="{{ route('reportlist') }}" class="dropdown-toggle no-arrow">
+								<span class="micon bi-file-earmark-pdf"></span>
+								<span class="mtext">Reports</span>
 							</a>
-                            
+							
 						</li>
+						
+						
 
 						@else
 

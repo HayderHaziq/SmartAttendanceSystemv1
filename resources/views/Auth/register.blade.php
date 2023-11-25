@@ -110,17 +110,18 @@
 		</div>
 	</div>
 
-    <div class="row">
+	<div class="row">
 		<div class="col-md-6 col-sm-12">
 			<div class="form-group">
 				<label>Password</label>
-				<input type="text" class="form-control" name="password" required>
+				<input type="password" class="form-control" name="password" required>
+				<small class="text-muted">Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one digit.</small>
 			</div>
 		</div>
 		<div class="col-md-6 col-sm-12">
 			<div class="form-group">
 				<label>Confirm Password</label>
-				<input type="text" class="form-control" name="cpassword" required>
+				<input type="password" class="form-control" name="cpassword" required>
 			</div>
 		</div>
 	</div>

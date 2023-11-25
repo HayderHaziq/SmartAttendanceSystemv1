@@ -173,47 +173,45 @@ class AuthenticationController extends Controller
      */
     public function store(Request $request)
     {
-        
-
-        $username = $request->input('username');
-        $fullname = $request->input('fullname');
-        $email = $request->input('email');
-        $mobile = $request->input('mobile');
-        $department = $request->input('department');
-        $password = $request->input('password');
-        $cpassword = $request->input('cpassword');
-
-        //check unique
-        $emailcheck = User::where('email',$email)->count();
-        $usernamecheck = User::where('username',$username)->count();
-     
-
-        if($emailcheck > 0){
-            return redirect()->back()->with('error', 'The Email already Exist!');
+        $request->validate([
+            'username' => 'required|string|unique:users',
+            'fullname' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users',
+            'mobile' => 'required|numeric',
+            'department' => 'required|string|max:255',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+                // At least one lowercase letter, one uppercase letter, and one digit
+            ],
+            'cpassword' => 'required|string|same:password', // Ensure confirmation matches password
+        ]);
+    
+        $emailCheck = User::where('email', $request->input('email'))->count();
+        $usernameCheck = User::where('username', $request->input('username'))->count();
+    
+        if ($emailCheck > 0) {
+            return redirect()->back()->with('error', 'The Email already exists!');
+        } elseif ($usernameCheck > 0) {
+            return redirect()->back()->with('error', 'The Username already exists!');
         }
-        else if($usernamecheck > 0){
-            return redirect()->back()->with('error', 'The Username already Exist!');
-        }
-        else if($password != $cpassword){
-            return redirect()->back()->with('error', 'Password and Re Password does not Match!');
-        }
-        else{
-            $user = new User;
-            $user->username = $username;
-            $user->fullname = $fullname;
-            $user->email = $email;
-            $user->mobile = $mobile;
-            $user->department = $department;
-            $user->password = Hash::make($password);
-            $user->role = 'Teacher';
-            $user->status = 'A';
-            $user->updated_at = Carbon::now();
-            $user->save();
-
-            return redirect('/')->with('success', 'Registration has been successfully saved!. Please login to your Account.');
-
-        }
-
+    
+        // Create a new user
+        $user = new User;
+        $user->username = $request->input('username');
+        $user->fullname = $request->input('fullname');
+        $user->email = $request->input('email');
+        $user->mobile = $request->input('mobile');
+        $user->department = $request->input('department');
+        $user->password = Hash::make($request->input('password'));
+        $user->role = 'Teacher';
+        $user->status = 'A';
+        $user->updated_at = Carbon::now();
+        $user->save();
+    
+        return redirect('/')->with('success', 'Registration has been successfully saved! Please login to your Account.');
     }
 
     /**

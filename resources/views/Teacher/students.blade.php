@@ -1,6 +1,7 @@
 @include('Navigation.app')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
+{{-- FILE PATH == C:\laragon\www\SmartAttendanceSystemv1\resources\views\Teacher\students.blade.php --}}
 
 <style>
 .select2-selection__rendered {
@@ -183,84 +184,100 @@ $(document).ready(function () {
     });
 
     $(".attendance").click(function () {
-        var studentId = $(this).data('id');
-        console.log('Clicked button for student ID:', studentId);
+    var studentId = $(this).data('id');
+    console.log('Clicked button for student ID:', studentId);
 
-        $.ajax({
-            url: '/attendance/' + studentId,
-            method: 'GET',
-            dataType: 'json',
-            success: function (attendanceData) {
-                console.log('Attendance Data:', attendanceData);
-                if (attendanceData && attendanceData.attendance) {
-                    var data = attendanceData.attendance;
-                    $('#attendance_time').text(data.time);
-                    $('#attendance_date').text(data.date);
-                    $('#attendance_status').text(data.status);
+    $.ajax({
+        url: '/attendance/' + studentId,
+        method: 'GET',
+        dataType: 'json',
+        success: function (attendanceData) {
+            console.log('Attendance Data:', attendanceData);
 
-                    // Show the modal
-                    $('#viewAttendanceModal').modal('show');
+            if (attendanceData && attendanceData.data && attendanceData.data.length > 0) {
+                var records = attendanceData.data;
 
-                    // Event listener for the "Save" button within the modal
-                    $("#saveStatusBtn").off('click').on('click', function () {
-                        var newStatus = $('#changeStatusDropdown').val();
+                // Clear previous content in the modal body
+                $('#attendanceRecordsBody').empty();
 
-                        // Show a confirmation dialog
-                        if (confirm('Are you sure you want to update the status to ' + newStatus + '?')) {
-                            // Call the function to save the attendance status
-                            saveAttendanceStatus(studentId, newStatus);
-                        }
-                    });
+                // Populate modal body with attendance records
+                records.forEach(function (record) {
+                    var row = '<tr>' +
+                        '<td>' + record.time + '</td>' +
+                        '<td>' + record.date + '</td>' +
+                        '<td>' + record.status + '</td>' +
+                        '<td>' +
+                        '<select class="changeStatusDropdown">' +
+                        '<option value="Present">Present</option>' +
+                        '<option value="Absent">Absent</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>';
 
-                } else {
-                    $('#attendance_time').text('');
-                    $('#attendance_date').text('');
-                    $('#attendance_status').text('No attendance data available.');
-                    $('#viewAttendanceModal').modal('show');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching attendance data:', error);
-                $('#attendance_time').text('');
-                $('#attendance_date').text('');
-                $('#attendance_status').text('Error fetching attendance data.');
+                    $('#attendanceRecordsBody').append(row);
+                });
+
+                // Show the modal
+                $('#viewAttendanceModal').modal('show');
+
+                // Event listener for the "Save" button within the modal
+                $("#saveStatusBtn").off('click').on('click', function () {
+                    var newStatus = $('#attendanceRecordsBody .changeStatusDropdown').val();
+
+                    // Show a confirmation dialog
+                    if (confirm('Are you sure you want to update the status to ' + newStatus + '?')) {
+                        // Call the function to save the attendance status for each record
+                        records.forEach(function (record) {
+                            saveAttendanceStatus(record.id, newStatus);
+                        });
+                    }
+                });
+            } else {
+                $('#attendanceRecordsBody').html('<tr><td colspan="4">No attendance data available.</td></tr>');
                 $('#viewAttendanceModal').modal('show');
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching attendance data:', error);
+            $('#attendanceRecordsBody').html('<tr><td colspan="4">Error fetching attendance data.</td></tr>');
+            $('#viewAttendanceModal').modal('show');
+        }
     });
+});
 
-    function saveAttendanceStatus(studentId, newStatus) {
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');  // Get the CSRF token from the meta tag
+function saveAttendanceStatus(id, newStatus) {
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');  // Get the CSRF token from the meta tag
 
-        $.ajax({
-            url: '/update-attendance-status/' + studentId,
-            method: 'POST',
-            data: {
-                status: newStatus,
-                _token: csrfToken  // Include the CSRF token in the data
-            },
-            success: function (response) {
-                console.log(response);  // Log the response for debugging
+    $.ajax({
+        url: '/update-attendance-status/' + id,
+        method: 'POST',
+        data: {
+            status: newStatus,
+            _token: csrfToken  // Include the CSRF token in the data
+        },
+        success: function (response) {
+            console.log(response);  // Log the response for debugging
 
-                // Check if the response contains a 'message' key
-                if (response && response.message) {
-                    alert('Status updated successfully: ' + response.message);
-                } else {
-                    alert('Status update failed. Please try again.');
-                }
-
-                // You can also update the UI or perform additional actions based on the response
-            },
-            error: function (error) {
-                console.error(error);  // Log the error for debugging
-
-                // Display an error message to the user
-                alert('An error occurred while updating the status. Please try again.');
-
-                // You can handle errors based on the specific error response from the server
+            // Check if the response contains a 'message' key
+            if (response && response.message) {
+                alert('Status updated successfully: ' + response.message);
+            } else {
+                alert('Status update failed. Please try again.');
             }
-        });
-    }
+
+            // You can also update the UI or perform additional actions based on the response
+        },
+        error: function (error) {
+            console.error(error);  // Log the error for debugging
+
+            // Display an error message to the user
+            alert('An error occurred while updating the status. Please try again.');
+
+            // You can handle errors based on the specific error response from the server
+        }
+    });
+}
+
 });
 
 </script>

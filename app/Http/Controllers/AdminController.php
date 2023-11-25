@@ -217,4 +217,15 @@ class AdminController extends Controller
     {
         //
     }
+
+    public function showReports()
+    {
+        $students = students::latest()->get();
+        
+        $classes = classes::select('classes.id AS classid','classes.*','users.*')
+            ->leftJoin('users', 'classes.teacher', '=', 'users.id')
+            ->get();
+    
+        return view('Admin.reports', compact('students', 'classes'));
+    }
 }
