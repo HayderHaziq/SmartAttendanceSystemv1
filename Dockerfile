@@ -32,8 +32,5 @@ COPY . .
 # Set the storage and bootstrap/cache directories permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Expose the PORT environment variable for Google Cloud Run
-ENV PORT 8080
-
 # Start the Apache server with the proper port
 CMD ["apache2-foreground"]
