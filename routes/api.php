@@ -4,7 +4,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Add the route for receiving attendance data
-Route::post('/attendance', [AttendanceController::class, 'receiveAttendance']);
+Route::post('/attendance', [AttendanceApiController::class, 'receiveAttendance']);
