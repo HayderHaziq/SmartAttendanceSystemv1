@@ -18,7 +18,7 @@ RUN a2enmod rewrite
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set the working directory to /var/www/html
-WORKDIR /var/www/html/public
+WORKDIR /var/www/html
 
 # Copy the composer.json and composer.lock files to the container
 COPY composer.json composer.lock ./
@@ -34,4 +34,3 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Start the Apache server with the proper port
 CMD ["apache2-foreground"]
-
