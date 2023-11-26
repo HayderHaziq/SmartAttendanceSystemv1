@@ -23,10 +23,11 @@ WORKDIR /var/www/html
 # Copy the composer.json and composer.lock files to the container
 COPY composer.json composer.lock ./
 
-COPY ./ /var/www/html/
-
 # Install Laravel dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts
+
+# Download and install Cloud SQL Auth Proxy
+RUN curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 && chmod +x cloud_sql_proxy
 
 # Copy the rest of the application code to the container
 COPY . .
@@ -34,5 +35,5 @@ COPY . .
 # Set the storage and bootstrap/cache directories permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Start the Apache server with the proper port
-CMD ["apache2-foreground"]
+# Start the Cloud SQL Auth Proxy and Apache server
+CMD ["./cloud_sql_proxy", "-instances=nodal-suprstate-405304:asia-southeast1:smartattendancesystem=tcp:3306", "&", "apache2-foreground"]
