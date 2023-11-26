@@ -69,39 +69,33 @@ class AttendanceController extends Controller
      */
     public function receiveAttendance(Request $request)
     {
-        // Validate the request data
         $validatedData = $request->validate([
-            'ndef_data' => 'required|string', // Adjust validation rules as needed
+            'ndef_data' => 'required|string',
         ]);
 
-        // Process the NDEF data
-        // Example: Split the NDEF data into student ID and event ID
+        //process the ndef data
         $ndefParts = explode(',', $validatedData['ndef_data']);
 
         if (count($ndefParts) == 2) {
             $studentId = $ndefParts[0];
             $eventId = $ndefParts[1];
 
-            // Check if attendance record already exists for the student and event on the given date
             $attendance = Attendance::where('student_id', $studentId)
                 ->where('date', now()->toDateString())
                 ->first();
 
             if ($attendance) {
-                // If attendance record exists, update status based on your logic
-                // For simplicity, we'll assume updating to "Present" for now
                 $attendance->status = 'Present';
                 $attendance->time = now()->toTimeString(); // Update the time
                 $attendance->save();
 
                 return response()->json(['message' => 'Attendance updated successfully']);
             } else {
-                // If attendance record doesn't exist, create a new one
                 Attendance::create([
                     'student_id' => $studentId,
                     'time' => now()->toTimeString(),
                     'date' => now()->toDateString(),
-                    'status' => 'Present', // You may adjust this based on your needs
+                    'status' => 'Present',
                 ]);
 
                 return response()->json(['message' => 'Attendance marked successfully']);
