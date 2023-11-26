@@ -23,6 +23,8 @@ WORKDIR /var/www/html/
 # Copy the composer.json and composer.lock files to the container
 COPY composer.json composer.lock ./
 
+COPY ./ /var/www/html/
+
 # Install Laravel dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts
 
