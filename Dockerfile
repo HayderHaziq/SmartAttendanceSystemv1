@@ -35,5 +35,3 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 # Start the Apache server with the proper port
 CMD ["apache2-foreground"]
 
-# Expose port 80 to the outside world
-EXPOSE 80
