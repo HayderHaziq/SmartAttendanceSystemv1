@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class AttendanceApiController extends Controller
 {
     /**
-     * Handle the incoming NDEF data for attendance.
+     * 
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -25,21 +25,17 @@ class AttendanceApiController extends Controller
         try {
             DB::beginTransaction();
 
-            // Process the ndef data
             $ndefParts = explode(',', $validatedData['ndef_data']);
 
             if (count($ndefParts) == 2) {
                 $studentId = $ndefParts[0];
                 $readerId = $ndefParts[1];
 
-                // Check if the student ID exists in the database
                 $userExists = students::where('id', $studentId)->exists();
 
-                // Check if the reader ID exists in the card_readers table
                 $cardReader = CardReader::where('reader_id', $readerId)->first();
 
                 if ($userExists && $cardReader) {
-                    // Student and reader exist, proceed with creating a new attendance record
 
                     Attendance::create([
                         'student_id' => $studentId,
@@ -53,7 +49,6 @@ class AttendanceApiController extends Controller
 
                     return response()->json(['message' => 'Attendance marked successfully']);
                 } else {
-                    // Either user or card reader does not exist, reject the attendance record
                     return response()->json(['error' => 'Invalid user ID or reader ID'], 400);
                 }
             } else {

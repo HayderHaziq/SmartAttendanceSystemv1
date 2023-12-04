@@ -15,9 +15,6 @@ class CardReader extends Model
 
     protected $fillable = ['reader_id', 'class_id', 'created_at', 'updated_at'];
 
-    // Define relationships if needed
-
-    // Example: One-to-One relationship with the classes table
     public function class()
     {
         return $this->belongsTo(classes::class, 'class_id');

@@ -24,20 +24,16 @@ class TeacherController extends Controller
 
     public function students()
     {
-        // Retrieve the list of students
         $students = students::leftJoin('classes', 'students.class_id', '=', 'classes.id')
             ->where('classes.teacher', auth()->user()->id)
             ->get();
     
-        // Retrieve the list of class IDs (assuming 'id' is the primary key of the 'students' table)
         $justIds = students::pluck('id')->toArray();
     
-        // Retrieve the list of classes (if needed)
         $classes = classes::select('classes.id AS classid', 'classes.*', 'users.*')
             ->leftJoin('users', 'classes.teacher', '=', 'users.id')
             ->get();
     
-        // Pass the data to the view
         return view('Teacher.Students', compact('students', 'classes', 'justIds'));
     }
     

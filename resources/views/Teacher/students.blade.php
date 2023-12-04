@@ -197,10 +197,8 @@ $(document).ready(function () {
             if (attendanceData && attendanceData.data && attendanceData.data.length > 0) {
                 var records = attendanceData.data;
 
-                // Clear previous content in the modal body
                 $('#attendanceRecordsBody').empty();
 
-                // Populate modal body with attendance records
                 records.forEach(function (record) {
                     var row = '<tr>' +
                         '<td>' + record.time + '</td>' +
@@ -217,16 +215,12 @@ $(document).ready(function () {
                     $('#attendanceRecordsBody').append(row);
                 });
 
-                // Show the modal
                 $('#viewAttendanceModal').modal('show');
 
-                // Event listener for the "Save" button within the modal
                 $("#saveStatusBtn").off('click').on('click', function () {
                     var newStatus = $('#attendanceRecordsBody .changeStatusDropdown').val();
 
-                    // Show a confirmation dialog
                     if (confirm('Are you sure you want to update the status to ' + newStatus + '?')) {
-                        // Call the function to save the attendance status for each record
                         records.forEach(function (record) {
                             saveAttendanceStatus(record.id, newStatus);
                         });
@@ -246,34 +240,31 @@ $(document).ready(function () {
 });
 
 function saveAttendanceStatus(id, newStatus) {
-    var csrfToken = $('meta[name="csrf-token"]').attr('content');  // Get the CSRF token from the meta tag
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');  
 
     $.ajax({
         url: '/update-attendance-status/' + id,
         method: 'POST',
         data: {
             status: newStatus,
-            _token: csrfToken  // Include the CSRF token in the data
+            _token: csrfToken  
         },
         success: function (response) {
-            console.log(response);  // Log the response for debugging
+            console.log(response);  
 
-            // Check if the response contains a 'message' key
+
             if (response && response.message) {
                 alert('Status updated successfully: ' + response.message);
             } else {
                 alert('Status update failed. Please try again.');
             }
 
-            // You can also update the UI or perform additional actions based on the response
         },
         error: function (error) {
-            console.error(error);  // Log the error for debugging
+            console.error(error);
 
-            // Display an error message to the user
             alert('An error occurred while updating the status. Please try again.');
 
-            // You can handle errors based on the specific error response from the server
         }
     });
 }

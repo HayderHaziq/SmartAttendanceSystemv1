@@ -20,19 +20,16 @@
                                 <th>Time</th>
                                 <th>Date</th>
                                 <th>Status</th>
-                                <!-- Add a new header for the dropdown (optional) -->
                                 <th>Change Status</th>
                             </tr>
                         </thead>
                         <tbody id="attendanceRecordsBody">
-                            <!-- Attendance records will be dynamically added here -->
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <!-- Keep the "Save" button -->
                 <button type="button" class="btn btn-primary" id="saveStatusBtn">Save</button>
             </div>
         </div>
