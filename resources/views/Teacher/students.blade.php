@@ -125,7 +125,7 @@ width: auto !important;
 
 												<a class="dropdown-item attendance" 
 												href="#"
-												data-id="{{ $justIds[$key] }}"
+												data-id="{{ isset($justIds[$key]) ? $justIds[$key] : 'ID Not Available' }}"
 												data-studentname="{{ $student->student_name }}"
 												data-studentid="{{ $student->student_id }}"
 												data-classes="{{ $student->class_id }}"

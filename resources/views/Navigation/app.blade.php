@@ -9,19 +9,19 @@
 		<link
 			rel="apple-touch-icon"
 			sizes="180x180"
-			href="{{asset('vendors/images/apple-touch-icon.png')}}"
+			href="/vendors/images/apple-touch-icon.png"
 		/>
 		<link
 			rel="icon"
 			type="image/png"
 			sizes="32x32"
-            href="{{asset('Image/calendar.png')}}"
+            href="/Image/calendar.png"
 		/>
 		<link
 			rel="icon"
 			type="image/png"
 			sizes="16x16"
-            href="{{asset('Image/calendar.png')}}"
+            href="/Image/calendar.png"
 		/>
 
 		<!-- Mobile Specific Metas -->
@@ -36,23 +36,23 @@
 			rel="stylesheet"
 		/>
 		<!-- CSS -->
-		<link rel="stylesheet" type="text/css" href="{{asset('vendors/styles/core.css')}}" />
+		<link rel="stylesheet" type="text/css" href="/vendors/styles/core.css" />
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="{{asset('vendors/styles/icon-font.min.css')}}"
+			href="/vendors/styles/icon-font.min.css"
 		/>
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="{{asset('src/plugins/datatables/css/dataTables.bootstrap4.min.css')}}"
+			href="/src/plugins/datatables/css/dataTables.bootstrap4.min.css"
 		/>
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="{{asset('src/plugins/datatables/css/responsive.bootstrap4.min.css')}}"
+			href="/src/plugins/datatables/css/responsive.bootstrap4.min.css"
 		/>
-		<link rel="stylesheet" type="text/css" href="{{asset('vendors/styles/style.css')}}" />
+		<link rel="stylesheet" type="text/css" href="/vendors/styles/style.css" />
 
 	</head>
 	<body>
@@ -85,7 +85,7 @@
 							data-toggle="dropdown"
 						>
 							<span class="user-icon">
-								<img src="{{asset('event.png')}}" alt="" />
+								<img src="/event.png" alt="" />
 							</span>
 							<span class="user-name">{{ auth()->user()->username }}</span>
 						</a>
